@@ -1,0 +1,192 @@
+<ui:composition template="/WEB-INF/templates/plantilla.xhtml" 
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title"></ui:define>
+    <ui:define name="content">
+
+        <body class="body page-index clearfix">
+
+
+            <button onclick="window.location = 'faces/log-in.xhtml';" class="_button _button-1">Entrar</button>
+            <button onclick="window.location = 'faces/crear-evento.xhtml';" id="crearevento" class="_button _button-4">Crear evento</button>
+
+            <c:choose>
+                <c:when test="#{usuarioControlador.user.rol == 'normal'}">
+                    <h:form><h:commandButton class="_button" label="Modificar datos" value="Modificar datos" action="#{usuarioControlador.vamosAModificarDatos()}"/></h:form>
+                </c:when>
+            </c:choose>
+
+            <c:choose>
+                <c:when test="#{empty usuarioControlador.user.rol}">
+                    <button onclick="window.location = 'faces/sign-up.xhtml';" class="_button _button-2">Registarse</button>
+                </c:when>
+            </c:choose>
+
+            <c:choose>
+                <c:when test="#{usuarioControlador.user.rol == 'administrador'}">
+                    <button onclick="window.location = 'faces/mostrar-periodistas.xhtml';" class="_button _button-3">Periodistas</button>
+                    <button onclick="window.location = 'faces/mostrar-usuarios.xhtml';" class="_button _button-3">Todos usuarios</button>
+                </c:when>
+            </c:choose>
+
+            <c:choose>
+                <c:when test="#{usuarioControlador.user.rol == 'periodista'}">
+                    <button onclick="window.location = 'faces/proponer-evento.xhtml';" class="_button _button-6">Eventos propuestos</button>
+                </c:when>
+            </c:choose>
+
+            <table columns="2" style="width:100%">
+                <td style="width: 85%;">
+                    <h:form id="form">
+                        <p:dataGrid var="evento" value="#{ec.verEventos()}" columns="3" layout="grid"
+                                    rows="12" paginator="true" id="evs"
+                                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                    rowsPerPageTemplate="6,12,24">
+
+                            <f:facet name="header">
+                                Eventos Diario Sur
+                            </f:facet>
+
+                            <p:panel header="#{evento.nombre}" style="text-align:center">
+
+                                <h:panelGrid columns="1" style="width:100%">
+                                    <h:outputText value="Localidad: #{evento.localidad}"/>
+                                    <h:outputText value="Precio: #{evento.precio}"/>
+                                    <h:outputText value="Fecha de inicio: #{be.calcularFechaSola(evento.fecha_inicio)}"/>
+                                    <h:outputText value="Fecha de fin: #{be.calcularFechaSola(evento.fecha_fin)}"/>
+
+
+                                    <h:outputText value="Likes: #{evento.verLikes()}"/>
+
+
+                                    <h:commandButton class="_button" label="Abrir" value="Abrir" action="#{ec.seleccionaEvento(evento)}"/>
+
+
+                                    <p:commandLink update=":form:evDetail" oncomplete="PF('evDialog').show()" title="View Detail">
+                                        <h:outputText styleClass="ui-icon ui-icon-search" style="margin:0 auto;" />
+                                        <f:setPropertyActionListener value="#{evento}" target="#{ec.eselected}" />
+                                    </p:commandLink>
+                                </h:panelGrid>
+                            </p:panel>
+                        </p:dataGrid>
+
+                        <p:dialog header="Evento info" widgetVar="evDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                            <p:outputPanel id="evDetail" style="text-align:center;">
+                                <p:panelGrid  columns="2" rendered="#{not empty ec.eselected}" columnClasses="label,value">
+                                    <f:facet name="header">
+                                        Eventos Diario Sur
+                                    </f:facet>
+
+                                    <h:outputText value="Nombre:" />
+                                    <h:outputText value="#{ec.eselected.nombre}" />
+
+                                    <h:outputText value="Fecha inicio:" />
+                                    <h:outputText value="#{be.calcularFecha(ec.eselected.fecha_inicio)}" />
+
+
+
+                                    <h:outputText value="Fecha fin:" />
+                                    <h:outputText value="#{be.calcularFecha(ec.eselected.fecha_fin)}" />
+
+
+                                    <h:outputText value="Localidad:" />
+                                    <h:outputText value="#{ec.eselected.localidad}" />
+
+
+                                    <h:outputText value="Dirección:" />
+                                    <h:outputText value="#{ec.eselected.direccion}" />
+
+
+
+                                    <h:outputText value="Complejo:" />
+                                    <h:outputText value="#{ec.eselected.complejo}" />
+
+
+
+                                    <h:outputText value="Precio:" />
+                                    <h:outputText value="#{ec.eselected.precio}" />
+
+
+
+                                    <h:outputText value="Teléfono de contacto:" />
+                                    <h:outputText value="#{ec.eselected.tlf_contacto}" />
+
+
+
+                                    <h:outputText value="Organizador:" />
+                                    <h:outputText value="#{ec.eselected.organizador}" />
+
+
+
+                                    <h:outputText value="Tipo de evento:" />
+                                    <h:outputText value="#{ec.eselected.te}" />
+
+                                </p:panelGrid>
+                            </p:outputPanel>
+                        </p:dialog>
+                    </h:form>
+                </td>
+                <td class="busqueda" align="center" width="15%">
+
+                    <h:form>
+
+
+                        <div class="container _container clearfix" style="width:100%;right: 100%">
+                            <h:panelGrid columns="2" columnClasses="ui-grid-col-5,ui-grid-col-8" styleClass="ui-panelgrid-blank" style="width:20%"  >
+
+                                <f:facet name="header">
+                                    Búsqueda
+                                </f:facet>
+
+                                <p class="text text-2">Nombre:<h:inputText id="buscar" class="_input _input-1 js-busqueda" value="#{be.f_nombre}"/></p>
+
+
+
+                                <p class="text text-3">
+                                    Localidad:
+                                </p>
+                                <div id="localidad" class="wrapper wrapper-1 js-localidad">
+                                    <h:selectOneMenu value = "#{be.f_localidad}">
+                                        <f:selectItem itemValue="#{null}" itemLabel="Elige una opción" /> 
+                                        <f:selectItems value = "#{ec.getLocalidadesNoProp()}" var="local" itemLabel = "#{local}" itemValue="#{local}"/> 
+                                    </h:selectOneMenu> 		
+                                </div>
+
+                                <p class="text text-4">
+                                    Tipo:
+                                </p>
+                                <div id="tipo" class="wrapper wrapper-2 js-tipo">
+                                    <h:selectOneMenu value="#{be.f_tipo}"> 		
+                                        <f:selectItem itemValue="#{null}" itemLabel="Elige una opción" />
+                                        <f:selectItem itemValue="Empresarial" itemLabel="Empresarial" />
+                                        <f:selectItem itemValue="Social" itemLabel="Social" />
+                                        <f:selectItem itemValue="Cultural" itemLabel="Cultural" />
+                                        <f:selectItem itemValue="Otro" itemLabel="Otro" />
+                                    </h:selectOneMenu>
+                                </div>
+
+                                <div id="fecha" class="wrapper wrapper-3 js-fecha">
+
+                                    <p:outputLabel for="fechainicio" value="Después de:" />
+                                    <p:calendar id="fechainicio" value="#{be.f_fechai}" pattern="dd/MM/yyyy HH:mm" />
+                                    <p:outputLabel for="fechafinal" value="Antes de:" />
+                                    <p:calendar id="fechafinal" value="#{be.f_fechaf}" pattern="dd/MM/yyyy HH:mm" />
+
+
+                                </div>
+                                <f:facet name="footer">
+                                    <h:commandButton class="_button" label="Buscar" value="Buscar" action="#{be.buscarEventos()}"/>
+                                </f:facet>
+                            </h:panelGrid>
+                        </div>
+                    </h:form>
+                </td>
+            </table>
+        </body>
+    </ui:define>
+</ui:composition>

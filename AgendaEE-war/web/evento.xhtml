@@ -1,0 +1,148 @@
+<ui:composition template="/WEB-INF/templates/plantilla.xhtml" 
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title"></ui:define>
+    <ui:define name="content">
+
+
+        <body class="body page-evento clearfix">
+
+            <c:choose>
+                <c:when test="#{not empty usuarioControlador.user and usuarioControlador.user.rol == 'periodista'}">
+                    <h:form>
+                        <h:commandButton value="Modificar" action="modificar-evento.xhtml"/>
+                    </h:form>
+                </c:when> 
+            </c:choose>
+
+            <h:form>
+                <h:panelGrid columns="2" cellpadding="5">  
+                    <b class="text">
+                        Nombre:<h:outputText value="#{ec.eselected.nombre}"/>
+                    </b>
+                    <b class="text">
+                        Descripción:
+                    </b>
+                    <p:inputTextarea rows="3" cols="30" value="#{ec.eselected.descripcion}" readonly="true" style="background-color: #DDDDDD"/>
+                    
+                    <b class="text">
+                        Fecha inicio:<h:outputText class="_input" value="#{be.calcularFecha(ec.eselected.fecha_inicio)}"/>
+                    </b>
+                    
+                    <b class="text">
+                        Fecha fin:<h:outputText class="_input" value="#{be.calcularFecha(ec.eselected.fecha_fin)}"/>
+                    </b>
+                    
+                    <b class="text">
+                        Localidad:<h:outputText class="_input" value="#{ec.eselected.localidad}"/>
+                    </b>
+                    <b class="text">
+                        Dirección:<h:outputText class="_input" value="#{ec.eselected.direccion}"/>
+                    </b>
+                    <b class="text">
+                        Complejo:<h:outputText class="_input" value="#{ec.eselected.complejo}"/>
+                    </b>
+                    <b class="text">
+                        Precio:<h:outputText class="_input" value="#{ec.eselected.precio} €"/>
+                    </b>
+                    <b class="text">
+                        Teléfono:<h:outputText class="_input" value="#{ec.eselected.tlf_contacto}"/>
+                    </b>
+                    <b class="text">
+                        Organizador:<h:outputText class="_input" value="#{ec.eselected.organizador}"/>
+                    </b>
+                    
+                    <b class="text">
+                        Tipo de evento:<h:outputText class="_input" value="#{ec.eselected.te}"/>
+                    </b>
+                    
+                    
+
+
+                </h:panelGrid> 
+                <p:spacer height="10" />
+
+                <p:separator />
+                <h:panelGrid columns="2" cellpadding="5">  
+
+                    <b>Likes: </b>
+                    <h:outputText id="likes"  value="#{vc.verLikes()}"/>
+                    <c:choose>
+                        <c:when test="#{not empty usuarioControlador.user and !vc.haValorado()}">
+                            <h:form>
+                                <h:commandButton class="_button" label="Like" value="dolike" action="#{vc.doLike()}"/>
+                            </h:form>
+                        </c:when>
+                    </c:choose>
+                </h:panelGrid> 
+
+                <p:spacer height="10" />
+                <p:separator />
+
+                <h:form>
+                    <b>
+                        Opiniones de los usuarios
+                    </b>
+                </h:form>
+
+                <h:panelGrid columns="2" cellpadding="5">  
+
+                    <b>Media: </b>
+                    <h:outputText id="media"  value="#{vc.verMedia()}"/>
+
+                </h:panelGrid> 
+
+
+
+
+            </h:form>
+
+            <c:choose>    
+                <c:when test="#{not empty usuarioControlador.user and not vc.haValorado()}">
+                    <h:form> 
+                        <div id="enviarvaloracion" class="container clearfix">
+                            <b class="text text-1">
+                                Valoración:
+                            </b>
+                            <div id="tipo" class="wrapper wrapper-2 js-tipo">
+                                <h:selectOneMenu value="#{vc.puntuacion}">
+                                    <f:selectItem itemValue="0" itemLabel="0" />
+                                    <f:selectItem itemValue="1" itemLabel="1" />
+                                    <f:selectItem itemValue="2" itemLabel="2" />
+                                    <f:selectItem itemValue="3" itemLabel="3" />
+                                    <f:selectItem itemValue="4" itemLabel="4" />
+                                    <f:selectItem itemValue="5" itemLabel="5" />
+                                </h:selectOneMenu>
+                            </div>
+                            <b class="text text-2">
+                                Comentarios:
+                            </b>
+                            <h:inputText id="buscar" class="_input _input-1 js-busqueda" value="#{vc.comentario}"/>
+                            <h:commandButton class="_button" label="Valorar" value="Valorar" action="#{vc.creaValoracion()}"/>
+                        </div>
+                    </h:form>
+                </c:when>
+            </c:choose>
+
+            <ui:repeat var="valoraciones" value="#{vc.verValoraciones()}">
+                <h:form>       
+                    <div class="container _element" style="border-style: solid;border-color: black;border-width: thin;width: 40%">
+
+                        <p><b class="text text-1">Nickname: <h:outputText id="nickvaloracion"  value="#{valoraciones.autor.nickname}"/></b></p>
+                        <p><b class="text text-1">Comentario: <h:outputText id="comentario"  value="#{valoraciones.comentario}"/></b></p>
+                        <p><b class="text text-1">Puntuación: <h:outputText id="puntuacion"  value="#{valoraciones.puntuacion}"/></b></p>
+
+                    </div>
+
+                </h:form>
+            </ui:repeat>
+
+        </body>
+    </ui:define>
+
+</ui:composition>

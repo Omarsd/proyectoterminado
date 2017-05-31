@@ -1,0 +1,58 @@
+<ui:composition template="/WEB-INF/templates/plantilla.xhtml" 
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">sign-up</ui:define>
+    <ui:define name="content">
+        <c:choose>
+            <c:when test="#{empty usuarioControlador.user}">
+                <h:form id="signup">
+
+                    <table>
+                        <tr>
+                            <td>Nickname: </td>
+                            <td><p:inputText id="nickname"  value="#{signup.nickname}" /></td>
+                        </tr>
+                        <tr>
+                            <td>Contraseña: </td>
+                            <td>
+                                <p:password id="contrasenia"  value="#{signup.contraseña}"/></td>
+
+                        </tr>
+                        <tr>
+                            <td>Repita contraseña: </td>
+                            <td><p:password id="contrasenia2"  value="#{signup.contraseña2}"/></td>
+
+                        </tr>
+                        <tr>
+
+                            <td colspan="2"><h:commandButton value="Registrarse" action="#{signup.crearUsuario()}"/></td>
+                        </tr>
+
+                    </table>
+                </h:form>
+            </c:when>
+            <c:otherwise>
+                <p>Debe salir de la aplicación si quiere crear otro usuario</p>
+            </c:otherwise>
+        </c:choose>
+        <!--><h:head>
+          <meta content="" />
+          <meta name="viewport" content="initial-scale=1.0" />
+          <title>
+            log-in
+          </title>
+          <link rel="stylesheet" href="./resources/css/log-in" />
+          <link rel="stylesheet" href="./resources/css/log-in-grid.css" />
+        </h:head>
+        <h:body class="body page-log-in clearfix">
+        <-->
+
+
+
+        <h:messages/>
+    </ui:define>
+</ui:composition>

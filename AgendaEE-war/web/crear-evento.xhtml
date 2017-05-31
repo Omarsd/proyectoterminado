@@ -1,0 +1,84 @@
+<ui:composition template="/WEB-INF/templates/plantilla.xhtml" 
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title"></ui:define>
+    <ui:define name="content">
+
+        <!-- <c:choose>
+             <c:when test="${usuarioControlador.user.rol == 'periodista' || usuarioControlador.user.rol == 'normal' }">      
+        -->              
+        <body class="body page-crear-evento clearfix">
+            <h:form>
+
+                <p class="text">
+                    Nombre:<p:inputText id="nombre" class="_input" value="#{newEv.nombre}"/>
+                </p>
+                <p class="text">
+                    Descripción:
+                </p>
+                <p:inputTextarea rows="3" cols="30" value="#{newEv.descripcion}" counter="display" maxlength="200" counterTemplate="{0} Caracteres restantes." autoResize="true" />
+                <h:outputText id="display" />
+                <p class="text">
+                    Localidad:<p:inputText id="localidad" class="_input" value="#{newEv.localidad}"/>
+                </p>
+                <p class="text">
+                    Dirección:<p:inputText id="direccion" class="_input" value="#{newEv.direccion}"/>
+                </p>
+                <p class="text">
+                    Complejo:<p:inputText id="complejo" class="_input" value="#{newEv.complejo}"/>
+                </p>
+                <p class="text">
+                    Precio:<p:inputText id="precio" class="_input" value="#{newEv.precio}"/>
+                </p>
+                <p class="text">
+                    Teléfono:<p:inputText id="tlf" class="_input" value="#{newEv.tlf_contacto}"/>
+                </p>
+                <p class="text">
+                    Organizador:<p:inputText id="organizador" class="_input" value="#{newEv.organizador}"/>
+                </p>
+                <p class="text">
+                    Tipo:<div id="tipo" class="wrapper wrapper-2 js-tipo">
+                        <h:selectOneMenu value="#{newEv.tevento}">
+                            <f:selectItem itemValue="#{null}" itemLabel="Seleccione un tipo" />
+                            <f:selectItem itemValue="#{'empresarial'}" itemLabel="Empresarial" />
+                            <f:selectItem itemValue="#{'social'}" itemLabel="Social" />
+                            <f:selectItem itemValue="#{'cultural'}" itemLabel="Cultural" />
+                            <f:selectItem itemValue="#{'otro'}" itemLabel="Otro" />
+
+                        </h:selectOneMenu>
+                    </div>
+                </p>
+
+                <!--  FECHAS   -->
+
+                <h:panelGrid columns="2" cellpadding="5">
+
+                    <p:outputLabel for="fechainicio" value="Fecha inicio:" />
+                    <p:calendar id="fechainicio" value="#{newEv.fecha_inicio}" pattern="dd/MM/yyyy HH:mm" />
+                    <p:outputLabel for="fechafin" value="Fecha fin:" />
+                    <p:calendar id="fechafin" value="#{newEv.fecha_fin}" pattern="dd/MM/yyyy HH:mm" />
+                </h:panelGrid>
+
+                <h:commandButton class="_button" label="Crear" value="Crear" action="#{newEv.creaEvento()}"/>
+
+            </h:form>
+
+
+        </body>
+
+        <!--</c:when>
+        <c:otherwise>
+                      
+                      <p>Solo pueden acceder usuarios registrados y periodistas</p>
+                      
+                  </c:otherwise>
+              </c:choose>-->
+
+
+    </ui:define>
+</ui:composition>

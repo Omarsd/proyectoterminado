@@ -1,0 +1,62 @@
+<ui:composition template="/WEB-INF/templates/plantilla.xhtml" 
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    
+<ui:define name="title"></ui:define>
+    <ui:define name="content">
+        <c:choose>
+        <c:when test="#{usuarioControlador.user.rol == 'periodista'}">
+  <body class="body page-proponer-evento clearfix">
+   
+       <h:form>
+                <p:dataGrid var="evento" value="#{ec.eventosPropuestos()}" columns="3" layout="grid"
+                            rows="12" paginator="true" id="evs"
+                            paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                            rowsPerPageTemplate="6,12,24">
+
+                    <f:facet name="header">
+                        Eventos Diario Sur
+                    </f:facet>
+
+                    <p:panel header="#{evento.nombre}" style="text-align:center">
+
+                        <h:panelGrid columns="1" style="width:100%">
+                            <h:outputText value="Likes: #{evento.verLikes()}"/>
+
+                            <h:commandButton class="_button" label="Abrir" value="Abrir" action="#{ec.seleccionaEvento(evento)}"/>
+
+
+                           <!-- <p:commandLink update=":form:evDetail" oncomplete="PF('evDialo').show()" title="View Detail">
+                                <h:outputText styleClass="ui-icon ui-icon-search" style="margin:0 auto;" />
+                                <f:setPropertyActionListener value="#{evento}" target="#{ec.eselected}" />
+                            </p:commandLink> -->
+                        </h:panelGrid>
+                    </p:panel>
+                </p:dataGrid>
+
+               <!-- <p:dialog header="Evento info" widgetVar="evDialo" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    <p:outputPanel id="evDetail" style="text-align:center;">
+                        <p:panelGrid  columns="2" rendered="#{not empty ec.eselected}" columnClasses="label,value">
+                            <f:facet name="header">
+                                Eventos Diario Sur
+                            </f:facet>
+
+                            <h:outputText value="Nombre:" />
+                            <h:outputText value="#{ec.eselected.nombre}" />
+
+                        </p:panelGrid>
+                    </p:outputPanel>
+                </p:dialog> -->
+            </h:form>
+    </body>
+    </c:when>
+        <c:otherwise>
+                <p>Solo puede ver esta vista un periodista</p>
+            </c:otherwise>
+     </c:choose>
+    </ui:define>
+    </ui:composition>

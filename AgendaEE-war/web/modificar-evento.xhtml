@@ -1,0 +1,62 @@
+<ui:composition template="/WEB-INF/templates/plantilla.xhtml" 
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui">
+    
+<ui:define name="title">ModificarDatos</ui:define>
+    <ui:define name="content">
+    
+        <p>¡¡Bienvenido <h:outputText value="#{usuarioControlador.user.nickname}"/>!!</p>
+                
+                <h:form id="modi">
+                    <h:panelGrid columns="2" columnClasses="column" cellpadding="5" cellspacing="1" >
+
+                    <h:outputLabel for="name" value="Nombre:" /><p:inputText value="#{ec.eselected.nombre}"  label="text" />
+                    <h:outputLabel for="loc" value="Localidad:" /><p:inputText value="#{ec.eselected.localidad}"  label="text" />
+                    <h:outputLabel for="prize" value="Precio:" /><p:inputText value="#{ec.eselected.precio}"  label="text" />
+                    <h:outputLabel for="address" value="Dirección:" /><p:inputText value="#{ec.eselected.direccion}"  label="text" />
+                    <h:outputLabel for="org" value="Organizador:" /><p:inputText value="#{ec.eselected.organizador}" label="text" />
+                    <h:outputLabel for="desc" value="Descripción:" /><p:inputText value="#{ec.eselected.descripcion}"  label="text" />
+                    </h:panelGrid>                    
+                    
+                    <h:panelGrid columns="2" cellpadding="5">
+       
+                    <p:outputLabel for="fechainicio" value="Fecha inicio:" />
+                    
+                    <p:calendar id="fechainicio" value="#{ec.eselected.fecha_inicio}" pattern="dd/MM/yyyy HH:mm" />
+                    
+                    <p:outputLabel for="fechafin" value="Fecha fin:" />
+                    <p:calendar id="fechafin" value="#{ec.eselected.fecha_fin}" pattern="dd/MM/yyyy HH:mm" />
+                    
+                    </h:panelGrid>
+ 
+                      <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+                        
+                            <h:outputText value="Destacado: " />
+                        
+                            <p:inputSwitch value="#{ec.eselected.destacado}" />
+                            
+                        
+                    </h:panelGrid>
+
+                    
+                    <h:commandButton class="_button" label="Confirmar cambios" value="Confirmar" action="#{ec.modificarEvento()}"/>
+                    <c:choose>
+                    <c:when test="#{ec.eselected.propuesto}">
+                       <h:commandButton class="_button" value="Validar evento" action="#{ec.validarEvento()}"/>
+                       <h:commandButton class="_button" value="Borrar evento" action="#{ec.eliminarEventoPropuesto()}"/>
+                    </c:when>
+                    <c:otherwise>
+                       <h:commandButton class="_button" value="Borrar evento" action="#{ec.eliminarEvento()}"/>                    
+                    </c:otherwise>
+                    </c:choose>
+                    
+                    </h:form>
+                     
+          
+    
+</ui:define>
+
+</ui:composition>

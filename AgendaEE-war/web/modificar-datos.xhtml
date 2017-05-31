@@ -1,0 +1,162 @@
+<ui:composition template="/WEB-INF/templates/plantilla.xhtml" 
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">ModificarDatos</ui:define>
+    <ui:define name="content">
+        <c:choose>
+            <c:when test="${empty usuarioControlador.user}">
+                No está logueado como usuario
+            </c:when>
+            <c:when test="#{usuarioControlador.user.rol == 'normal'}"> 
+
+                <p style="font-weight: 900">Perfil de <h:outputText value="#{usuarioControlador.user.nickname}"  /></p>
+
+                <h:form id="mod">
+
+
+
+                    <h:panelGrid columns="2" columnClasses="column" cellpadding="5" cellspacing="1" >
+
+                        <h:outputLabel for="nick" value="Nickname:" style="font-weight: bold"/>
+                        <p:inplace id="nick" editor="true" emptyLabel="No inicializado">
+                            <p:inputText value="#{usuarioControlador.user.nickname}"  label="text" />
+                        </p:inplace>
+
+                        <h:outputLabel for="name" value="Nombre:" style="font-weight: bold"/>
+                        <p:inplace id="name" editor="true" emptyLabel="No inicializado">
+                            <p:inputText value="#{usuarioControlador.user.nombre}"  label="text" />
+                        </p:inplace>
+
+
+
+                        <h:outputLabel for="apell" value="Apellidos:" style="font-weight: bold"/>
+                        <p:inplace id="apell" editor="true" emptyLabel="No inicializado">
+                            <p:inputText value="#{usuarioControlador.user.apellidos}"  label="text" />
+                        </p:inplace>
+
+                        <h:outputLabel for="email" value="E-mail:" style="font-weight: bold"/>
+                        <p:inplace id="email" editor="true" emptyLabel="No inicializado">
+                            <p:inputText value="#{usuarioControlador.user.email}"  label="text" />
+                        </p:inplace>
+
+
+                        <h:outputLabel for="pass" value="Contraseña:" style="font-weight: bold"/>
+                        <p:inplace editor="true" id="pass" label="#{usuarioControlador.asteriscoContraseña()}" emptyLabel="No inicializado">
+
+                            <p:inputText id="pwd1" value="#{usuarioControlador.user.contraseña}" label="Contraseña" />
+
+                        </p:inplace>
+
+
+
+                        <h:outputLabel for="dni" value="DNI:" style="font-weight: bold"/>
+                        <p:inplace id="dni" editor="true" emptyLabel="No inicializado">
+                            <p:inputText value="#{usuarioControlador.user.dni}"  label="text" />
+                        </p:inplace>
+
+
+                        <h:outputLabel for="address" value="Dirección:" style="font-weight: bold"/>
+                        <p:inplace id="address" editor="true" emptyLabel="No inicializado">
+                            <p:inputText value="#{usuarioControlador.user.direccion}"  label="text" />
+                        </p:inplace>
+
+
+                        <h:outputLabel for="tlf" value="Teléfono:" style="font-weight: bold"/>
+                        <p:inplace id="tlf" editor="true" emptyLabel="No inicializado">
+                            <p:inputText value="#{usuarioControlador.user.telefono}"  label="text" />
+                        </p:inplace>
+
+                        <h:outputLabel for="fechnac" value="Fecha de nacimiento:" style="font-weight: bold"/>
+                        <p:inplace id="fechnac" editor="true" label="#{be.calcularFechaSola(usuarioControlador.user.fecha_nacimiento)}" emptyLabel="No inicializado">
+                            <p:calendar value="#{usuarioControlador.user.fecha_nacimiento}" pattern="dd/MM/yyyy" />
+
+                        </p:inplace>
+
+                        <h:commandButton id="confirmar" value="Confirmar" action="#{usuarioControlador.modificarUsuario()}" />                  
+                        <h:commandButton id="borrarusuario" value="Borrar" action="#{usuarioControlador.borrarUsuario()}" />
+
+                    </h:panelGrid>
+                </h:form>
+            </c:when> 
+
+            <c:when test="#{(usuarioControlador.user.rol == 'administrador') and (!empty usuarioControlador.usuarioSelected)}">
+
+                <p style="font-weight: 900">Perfil de <h:outputText value="#{usuarioControlador.usuarioSelected.nickname}"  /></p>
+
+                <h:form id="modi">
+
+
+                    <h:panelGrid columns="2" columnClasses="column" cellpadding="5" cellspacing="1" >
+
+                        <h:outputLabel for="nicke" value="Nickname:" style="font-weight: bold" />
+                        <p:inplace editor="true" emptyLabel="No inicializado">
+                            <p:inputText value="#{usuarioControlador.usuarioSelected.nickname}"  label="text" />
+                        </p:inplace>
+
+                        <h:outputLabel for="namee" value="Nombre:" style="font-weight: bold" />
+                        <p:inplace id="namee" editor="true" emptyLabel="No inicializado">
+                            <p:inputText value="#{usuarioControlador.usuarioSelected.nombre}"  label="text" />
+                        </p:inplace>
+
+
+                        <h:outputLabel for="lastname" value="Apellidos:" style="font-weight: bold" />
+                        <p:inplace id="lastname" editor="true" emptyLabel="No inicializado">
+                            <p:inputText value="#{usuarioControlador.usuarioSelected.apellidos}"  label="text" />
+                        </p:inplace>
+
+                        <h:outputLabel for="emaile" value="E-mail:" style="font-weight: bold" />
+                        <p:inplace id="emaile" editor="true" emptyLabel="No inicializado">
+                            <p:inputText value="#{usuarioControlador.usuarioSelected.email}"  label="text" />
+                        </p:inplace>
+
+
+                        <h:outputLabel for="passe" value="Contraseña:" style="font-weight: bold" />
+                        <p:inplace id="passe" editor="true" label="#{usuarioControlador.asteriscoContraseñaP()}" emptyLabel="No inicializado">
+                            <p:inputText id="pwd7" value="#{usuarioControlador.user.contraseña}" label="Contraseña" />
+                        </p:inplace>
+
+
+                        <h:outputLabel for="dnie" value="DNI:" style="font-weight: bold" />
+                        <p:inplace id="dnie" editor="true" emptyLabel="No inicializado">
+                            <p:inputText value="#{usuarioControlador.usuarioSelected.dni}"  label="text" />
+                        </p:inplace>
+
+
+                        <h:outputLabel for="addresse" value="Dirección:" style="font-weight: bold" />
+                        <p:inplace id="addresse" editor="true" emptyLabel="No inicializado">
+                            <p:inputText value="#{usuarioControlador.usuarioSelected.direccion}"  label="text" />
+                        </p:inplace>
+
+
+                        <h:outputLabel for="tlfe" value="Teléfono:"  style="font-weight: bold"/>
+                        <p:inplace id="tlfe" editor="true" emptyLabel="No inicializado">
+                            <p:inputText value="#{usuarioControlador.usuarioSelected.telefono}"  label="text" />
+                        </p:inplace>
+
+                        <h:outputLabel for="fechnace" value="Fecha de nacimiento:"  style="font-weight: bold"/>
+                        <p:inplace id="fechnace" editor="true" label="#{be.calcularFechaSola(usuarioControlador.usuarioSelected.fecha_nacimiento)}" emptyLabel="No inicializado">
+                            <p:calendar value="#{usuarioControlador.usuarioSelected.fecha_nacimiento}" pattern="dd/MM/yyyy" />
+
+                        </p:inplace>
+
+                        <h:commandButton id="confirmar1" value="Confirmar" action="#{usuarioControlador.modificarUsuario()}" />                                   
+                        <h:commandButton id="borrarusuario1" value="Borrar" action="#{usuarioControlador.borrarUsuario()}" />
+
+                    </h:panelGrid>
+
+
+                </h:form>
+
+            </c:when>     
+
+            <c:otherwise>
+                <p>Solo puedo modificar sus datos un usuario normal o un administrador</p>
+            </c:otherwise>
+        </c:choose>
+    </ui:define>
+</ui:composition> 

@@ -1,0 +1,96 @@
+<ui:composition template="/WEB-INF/templates/plantilla.xhtml" 
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title"></ui:define>
+    <ui:define name="content">
+        <c:choose>
+            <c:when test="#{usuarioControlador.user.rol == 'administrador'}">
+                <body class="body page-mostrar-periodistas clearfix">
+
+                    <h:form>
+                        <h:commandButton class="_button" label="Crear periodista" value="Crear periodista" action="sign-up-periodista.xhtml"/>
+                    </h:form>
+
+                    <h:form id="form1">
+                        <p:dataGrid var="per" value="#{usuarioControlador.muestraPeriodistas()}" columns="3" layout="grid"
+                                    rows="12" paginator="true" id="per"
+                                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                    rowsPerPageTemplate="6,12,24">
+
+                            <f:facet name="header">
+                                Periodistas Diario Sur
+                            </f:facet>
+
+                            <p:panel header="#{per.nickname}" style="text-align:center">
+
+                                <h:panelGrid columns="1" style="width:100%">
+                                    <h:outputText value="Nombre: #{per.nombre}"/>
+                                    <h:outputText value="Apellidos: #{per.apellidos}"/>
+                                    <h:outputText value="DNI: #{per.dni}"/>
+
+                                    <h:commandButton class="_button" label="Abrir" value="Abrir" action="#{usuarioControlador.seleccionaUsuario(per)}"/>
+
+                                    <p:commandLink update=":form1:perDetail" oncomplete="PF('perDialog').show()" title="View Detail">
+                                        <h:outputText styleClass="ui-icon ui-icon-search" style="margin:0 auto;" />
+                                        <f:setPropertyActionListener value="#{per}" target="#{usuarioControlador.usuarioSelected}" />
+                                    </p:commandLink>
+                                </h:panelGrid>
+                            </p:panel>
+                        </p:dataGrid>
+                        <p:dialog header="Per info" widgetVar="perDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                            <p:outputPanel id="perDetail" style="text-align:center;">
+                                <p:panelGrid  columns="2" rendered="#{not empty usuarioControlador.usuarioSelected}" columnClasses="label,value">
+                                    <f:facet name="header">
+                                        Periodista Diario Sur
+                                    </f:facet>
+
+
+                                    <h:outputLabel for="nickk" value="Nickname:" />
+                                    <h:outputText value="#{usuarioControlador.usuarioSelected.nickname}" />
+
+                                    <h:outputLabel for="namee" value="Nombre:" />
+                                    <h:outputText value="#{usuarioControlador.usuarioSelected.nombre}"   />
+
+
+                                    <h:outputLabel for="lastname" value="Apellidos:" />
+                                    <h:outputText value="#{usuarioControlador.usuarioSelected.apellidos}"   />
+
+                                    <h:outputLabel for="emaile" value="E-mail:" />
+                                    <h:outputText value="#{usuarioControlador.usuarioSelected.email}"   />
+
+                                    <h:outputLabel for="dnie" value="DNI:" />
+                                    <h:outputText value="#{usuarioControlador.usuarioSelected.dni}"  />
+
+
+                                    <h:outputLabel for="addresse" value="Dirección:" />
+                                    <h:outputText value="#{usuarioControlador.usuarioSelected.direccion}"   />
+
+
+                                    <h:outputLabel for="tlfe" value="Teléfono:" />
+                                    <h:outputText value="#{usuarioControlador.usuarioSelected.telefono}"   />
+
+                                    <h:outputLabel for="fechnace" value="Fecha de nacimiento:" />
+                                    <h:outputText value="#{be.calcularFechaSola(usuarioControlador.usuarioSelected.fecha_nacimiento)}"/>
+
+
+                                </p:panelGrid>
+                            </p:outputPanel>
+                        </p:dialog>
+
+                    </h:form>
+
+
+
+                </body>
+            </c:when>
+            <c:otherwise>
+                <p>Solo puede ver esta vista un administrador</p>
+            </c:otherwise>
+        </c:choose>
+    </ui:define>
+</ui:composition>
